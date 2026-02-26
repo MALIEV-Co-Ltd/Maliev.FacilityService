@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="../Maliev.Aspire/Maliev.Aspire.ServiceDefaults/Maliev.Aspire.ServiceDefaults.csproj" />
+  <Project Path="../Maliev.MessagingContracts/generated/csharp/Maliev.MessagingContracts.csproj" />
+  <Project Path="Maliev.FacilityService.Api/Maliev.FacilityService.Api.csproj" />
+  <Project Path="Maliev.FacilityService.Application/Maliev.FacilityService.Application.csproj" />
+  <Project Path="Maliev.FacilityService.Domain/Maliev.FacilityService.Domain.csproj" />
+  <Project Path="Maliev.FacilityService.Infrastructure/Maliev.FacilityService.Infrastructure.csproj" />
+  <Project Path="Maliev.FacilityService.Tests/Maliev.FacilityService.Tests.csproj" />
+</Solution>
