@@ -52,3 +52,23 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# IDE — Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# appsettings overrides (keep only base; Aspire injects real values at runtime)
+appsettings.*.json
+!appsettings.json
+
+# Windows reserved device names (created accidentally by some tools)
+nul
+nul.*
