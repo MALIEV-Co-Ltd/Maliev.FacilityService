@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Maliev.Aspire.ServiceDefaults.Authorization;
 using Maliev.FacilityService.Application.DTOs;
 using Maliev.FacilityService.Application.UseCases.Commands.AddMaintenanceLog;
@@ -11,8 +12,9 @@ namespace Maliev.FacilityService.Api.Controllers;
 /// Manages maintenance log entries for equipment.
 /// </summary>
 [ApiController]
-[Route("facility/v1/equipments/{id:guid}/maintenance")]
-public class MaintenanceController : ControllerBase
+[ApiVersion("1.0")]
+[Route("facility/v{version:apiVersion}/equipments/{id:guid}/maintenance")]
+public class MaintenanceController : FacilityControllerBase
 {
     private readonly AddMaintenanceLogCommandHandler _addHandler;
     private readonly GetMaintenanceLogsQueryHandler _getHandler;
@@ -47,7 +49,7 @@ public class MaintenanceController : ControllerBase
     {
         var cmdWithId = command with { EquipmentId = id };
         var result = await _addHandler.HandleAsync(cmdWithId, cancellationToken);
-        return Created($"facility/v1/equipments/{id}/maintenance", result);
+        return Created($"facility/v{ApiVersion}/equipments/{id}/maintenance", result);
     }
 
     /// <summary>

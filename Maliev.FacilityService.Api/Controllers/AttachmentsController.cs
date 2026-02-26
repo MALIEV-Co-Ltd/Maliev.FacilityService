@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Maliev.Aspire.ServiceDefaults.Authorization;
 using Maliev.FacilityService.Application.DTOs;
 using Maliev.FacilityService.Application.UseCases.Commands.AddAttachment;
@@ -12,8 +13,9 @@ namespace Maliev.FacilityService.Api.Controllers;
 /// Manages CNC machine attachments (tools, fixtures, collets, etc.) for equipment.
 /// </summary>
 [ApiController]
-[Route("facility/v1/equipments/{equipmentId:guid}/attachments")]
-public class AttachmentsController : ControllerBase
+[ApiVersion("1.0")]
+[Route("facility/v{version:apiVersion}/equipments/{equipmentId:guid}/attachments")]
+public class AttachmentsController : FacilityControllerBase
 {
     private readonly AddAttachmentCommandHandler _addHandler;
     private readonly UpdateAttachmentCommandHandler _updateHandler;
@@ -69,7 +71,7 @@ public class AttachmentsController : ControllerBase
     {
         var cmdWithId = command with { EquipmentId = equipmentId };
         var result = await _addHandler.HandleAsync(cmdWithId, cancellationToken);
-        return Created($"facility/v1/equipments/{equipmentId}/attachments/{result.Id}", result);
+        return Created($"facility/v{ApiVersion}/equipments/{equipmentId}/attachments", result);
     }
 
     /// <summary>

@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Maliev.Aspire.ServiceDefaults.Authorization;
 using Maliev.FacilityService.Application.DTOs;
 using Maliev.FacilityService.Application.UseCases.Commands.AddEquipmentNote;
@@ -19,7 +20,8 @@ namespace Maliev.FacilityService.Api.Controllers;
 /// Manages equipment registration, lifecycle, notes, and queries across all 10 equipment categories.
 /// </summary>
 [ApiController]
-[Route("facility/v1/equipments")]
+[ApiVersion("1.0")]
+[Route("facility/v{version:apiVersion}/equipments")]
 public class EquipmentsController : ControllerBase
 {
     private readonly RegisterEquipmentCommandHandler _registerHandler;

@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // --- Infrastructure & Observability ---
 builder.AddServiceDefaults(); // OTel, health checks, resilience — DO NOT configure manually
+builder.AddDefaultApiVersioning(); // URL-segment versioning (e.g. /facility/v1/...)
 
 // --- Application Services ---
 builder.Services.AddApplication();
