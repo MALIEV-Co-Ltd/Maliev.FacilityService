@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using Maliev.FacilityService.Application.Interfaces;
+using Maliev.FacilityService.Domain.Exceptions;
 
 namespace Maliev.FacilityService.Infrastructure.ExternalClients;
 
@@ -43,6 +44,11 @@ public class JobServiceClient : IJobServiceClient
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
             return false;
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new JobServiceUnavailableException(
+                "The Job Service is temporarily unavailable. Please try again later.", ex);
         }
     }
 

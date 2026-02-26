@@ -61,7 +61,7 @@ public class LoanRepository : ILoanRepository
             .AsNoTracking()
             .AnyAsync(l =>
                 l.EquipmentId == equipmentId &&
-                (l.LoanStatus == LoanStatus.Active || l.LoanStatus == LoanStatus.Approved),
+                (l.LoanStatus == LoanStatus.Active || l.LoanStatus == LoanStatus.Approved || l.LoanStatus == LoanStatus.Pending),
                 cancellationToken);
     }
 

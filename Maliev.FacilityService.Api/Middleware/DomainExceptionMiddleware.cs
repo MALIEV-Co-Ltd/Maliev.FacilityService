@@ -62,10 +62,10 @@ public class DomainExceptionMiddleware
             context.Response.ContentType = "application/json";
             await context.Response.WriteAsJsonAsync(new { title = "Conflict", status = 409, detail = ex.Message });
         }
-        catch (HttpRequestException ex)
+        catch (JobServiceUnavailableException ex)
         {
-            // JobService (or another downstream service) is unreachable — return 503 Service Unavailable.
-            _logger.LogError(ex, "Downstream service unavailable");
+            // JobService is unreachable — return 503 Service Unavailable.
+            _logger.LogError(ex, "Job Service is unavailable");
             context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
             context.Response.ContentType = "application/json";
             await context.Response.WriteAsJsonAsync(new
@@ -73,7 +73,7 @@ public class DomainExceptionMiddleware
                 type = "https://tools.ietf.org/html/rfc9110#section-15.6.4",
                 title = "Service Unavailable",
                 status = 503,
-                detail = "A downstream service is temporarily unavailable. Please try again later."
+                detail = ex.Message
             });
         }
     }

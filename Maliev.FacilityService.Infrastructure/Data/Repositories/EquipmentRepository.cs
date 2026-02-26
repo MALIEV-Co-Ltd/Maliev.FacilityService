@@ -50,7 +50,7 @@ public class EquipmentRepository : IEquipmentRepository
 
             if (!string.IsNullOrEmpty(filters.NameContains))
             {
-                query = query.Where(e => e.Name.Contains(filters.NameContains));
+                query = query.Where(e => EF.Functions.ILike(e.Name, $"%{filters.NameContains}%"));
             }
 
             if (!string.IsNullOrEmpty(filters.Brand))
