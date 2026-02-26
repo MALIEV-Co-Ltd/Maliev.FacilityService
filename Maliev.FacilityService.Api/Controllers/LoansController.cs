@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Maliev.Aspire.ServiceDefaults.Authorization;
 using Maliev.FacilityService.Application.DTOs;
 using Maliev.FacilityService.Application.UseCases.Commands.ApproveLoan;
@@ -14,7 +15,8 @@ namespace Maliev.FacilityService.Api.Controllers;
 /// Manages equipment loan requests including employee and customer lending with approval workflow.
 /// </summary>
 [ApiController]
-[Route("facility/v1")]
+[ApiVersion("1.0")]
+[Route("facility/v{version:apiVersion}")]
 public class LoansController : ControllerBase
 {
     private readonly CreateLoanCommandHandler _createHandler;
@@ -59,7 +61,8 @@ public class LoansController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await _createHandler.HandleAsync(command, cancellationToken);
-        return Created($"facility/v1/equipments/{result.EquipmentId}/loans", result);
+        var version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "1";
+        return Created($"facility/v{version}/equipments/{result.EquipmentId}/loans", result);
     }
 
     /// <summary>
