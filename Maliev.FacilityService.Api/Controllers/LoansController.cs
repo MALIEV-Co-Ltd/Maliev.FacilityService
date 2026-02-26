@@ -17,7 +17,7 @@ namespace Maliev.FacilityService.Api.Controllers;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("facility/v{version:apiVersion}")]
-public class LoansController : ControllerBase
+public class LoansController : FacilityControllerBase
 {
     private readonly CreateLoanCommandHandler _createHandler;
     private readonly ApproveLoanCommandHandler _approveHandler;
@@ -61,8 +61,7 @@ public class LoansController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await _createHandler.HandleAsync(command, cancellationToken);
-        var version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "1";
-        return Created($"facility/v{version}/equipments/{result.EquipmentId}/loans", result);
+        return Created($"facility/v{ApiVersion}/equipments/{result.EquipmentId}/loans", result);
     }
 
     /// <summary>

@@ -14,7 +14,7 @@ namespace Maliev.FacilityService.Api.Controllers;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("facility/v{version:apiVersion}/equipments/{id:guid}/maintenance")]
-public class MaintenanceController : ControllerBase
+public class MaintenanceController : FacilityControllerBase
 {
     private readonly AddMaintenanceLogCommandHandler _addHandler;
     private readonly GetMaintenanceLogsQueryHandler _getHandler;
@@ -49,8 +49,7 @@ public class MaintenanceController : ControllerBase
     {
         var cmdWithId = command with { EquipmentId = id };
         var result = await _addHandler.HandleAsync(cmdWithId, cancellationToken);
-        var version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "1";
-        return Created($"facility/v{version}/equipments/{id}/maintenance", result);
+        return Created($"facility/v{ApiVersion}/equipments/{id}/maintenance", result);
     }
 
     /// <summary>
