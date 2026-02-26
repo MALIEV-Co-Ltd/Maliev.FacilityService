@@ -1,5 +1,4 @@
 using Maliev.FacilityService.Application.Interfaces;
-using Maliev.MessagingContracts.Contracts.Facility;
 using Maliev.MessagingContracts.Generated;
 using MassTransit;
 
