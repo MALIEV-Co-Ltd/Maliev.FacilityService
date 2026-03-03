@@ -29,10 +29,7 @@ public class LoansControllerTests
         var equipmentId = Guid.NewGuid();
         var response = await client.GetAsync($"/facility/v1/equipments/{equipmentId}/loans");
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var loans = await response.Content.ReadFromJsonAsync<List<LoanDto>>();
-        Assert.NotNull(loans);
-        Assert.Empty(loans);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
     [Fact]
@@ -50,8 +47,9 @@ public class LoansControllerTests
             borrowerType = "Employee",
             borrowerId = Guid.NewGuid(),
             borrowerName = "Test User",
-            scheduledStartDate = "2026-03-01",
-            scheduledEndDate = "2026-03-15"
+            loanStartDate = "2026-03-01",
+            expectedReturnDate = "2026-03-15",
+            purpose = "Test loan"
         };
 
         var response = await client.PostAsJsonAsync("/facility/v1/loans", loanCommand);

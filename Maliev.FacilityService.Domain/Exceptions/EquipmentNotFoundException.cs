@@ -3,7 +3,7 @@ namespace Maliev.FacilityService.Domain.Exceptions;
 /// <summary>
 /// Exception thrown when equipment is not found in the system.
 /// </summary>
-public class EquipmentNotFoundException : Exception
+public class EquipmentNotFoundException : KeyNotFoundException
 {
     /// <summary>
     /// Gets the ID of the equipment that was not found.

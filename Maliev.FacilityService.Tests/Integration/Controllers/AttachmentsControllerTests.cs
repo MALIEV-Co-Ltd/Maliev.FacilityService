@@ -47,7 +47,9 @@ public class AttachmentsControllerTests
         var attachmentCommand = new
         {
             name = "Test Attachment",
-            attachmentType = "Tool"
+            attachmentType = "Tool",
+            serialNumber = (string?)null,
+            conditionNotes = (string?)null
         };
 
         var response = await client.PostAsJsonAsync($"/facility/v1/equipments/{equipmentId}/attachments", attachmentCommand);

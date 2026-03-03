@@ -76,5 +76,12 @@ public class DomainExceptionMiddleware
                 detail = ex.Message
             });
         }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogInformation(ex, "Resource not found");
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsJsonAsync(new { title = "Not Found", status = 404, detail = ex.Message });
+        }
     }
 }
