@@ -60,7 +60,7 @@ public class AddMaintenanceLogIntegrationTests : IAsyncLifetime
             UpdatedAt = DateTime.UtcNow
         };
 
-        var repo = new Infrastructure.Data.Repositories.EquipmentRepository(context);
+        var repo = new Maliev.FacilityService.Infrastructure.Data.Repositories.EquipmentRepository(context);
         await repo.AddAsync(equipment);
         return equipment;
     }
@@ -71,8 +71,8 @@ public class AddMaintenanceLogIntegrationTests : IAsyncLifetime
         var testEquipment = await CreateTestEquipmentAsync();
 
         using var context = CreateDbContext();
-        var equipmentRepository = new Infrastructure.Data.Repositories.EquipmentRepository(context);
-        var maintenanceLogRepository = new Infrastructure.Data.Repositories.MaintenanceLogRepository(context);
+        var equipmentRepository = new Maliev.FacilityService.Infrastructure.Data.Repositories.EquipmentRepository(context);
+        var maintenanceLogRepository = new Maliev.FacilityService.Infrastructure.Data.Repositories.MaintenanceLogRepository(context);
 
         var command = new AddMaintenanceLogCommand(
             testEquipment.Id,
@@ -107,7 +107,7 @@ public class AddMaintenanceLogIntegrationTests : IAsyncLifetime
         var testEquipment = await CreateTestEquipmentAsync();
 
         using var context = CreateDbContext();
-        var maintenanceLogRepository = new Infrastructure.Data.Repositories.MaintenanceLogRepository(context);
+        var maintenanceLogRepository = new Maliev.FacilityService.Infrastructure.Data.Repositories.MaintenanceLogRepository(context);
 
         var employeeId1 = Guid.NewGuid();
         var employeeId2 = Guid.NewGuid();

@@ -76,6 +76,16 @@ The database uses EF Core's TPT pattern:
 
 Asset codes are auto-generated on registration: `MAL-{PREFIX}-{SEQ}` with per-category sequences.
 
+## Capacity Planning
+
+FacilityService maintains full capacity planning data for manufacturing operations:
+- **Machine availability** — real-time status of all equipment (Active, UnderMaintenance, etc.)
+- **Scheduling** — time slots, availability windows per machine
+- **Maintenance tracking** — scheduled maintenance, downtime history
+- **Queue depth** — current and projected queue per technology (FDM, SLA, CNC)
+- **Lead time estimates** — based on current load and historical data
+- **JobService integration** — provides real-time capacity visibility to job scheduling
+
 ## Status Values
 
 `Active`, `UnderMaintenance`, `OnLoan`, `Lost`, `Decommissioned` (terminal)

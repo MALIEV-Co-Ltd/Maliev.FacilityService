@@ -32,8 +32,8 @@ public class AddEquipmentNoteIntegrationTests : IAsyncLifetime
         _dbContext = new FacilityDbContext(options);
         await _dbContext.Database.EnsureCreatedAsync();
 
-        _equipmentRepository = new Infrastructure.Data.Repositories.EquipmentRepository(_dbContext);
-        _noteRepository = new Infrastructure.Data.Repositories.EquipmentNoteRepository(_dbContext);
+        _equipmentRepository = new Maliev.FacilityService.Infrastructure.Data.Repositories.EquipmentRepository(_dbContext);
+        _noteRepository = new Maliev.FacilityService.Infrastructure.Data.Repositories.EquipmentNoteRepository(_dbContext);
 
         _testEquipment = new FdmPrinterEquipment
         {
