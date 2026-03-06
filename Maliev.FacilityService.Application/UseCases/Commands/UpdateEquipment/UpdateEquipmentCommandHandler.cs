@@ -70,7 +70,7 @@ public class UpdateEquipmentCommandHandler
             }
         }
 
-        var updated = await _equipmentRepository.UpdateAsync(equipment, cancellationToken);
+        var updated = await _equipmentRepository.UpdateAsync(equipment, command.RowVersion, cancellationToken);
         return updated.ToDto();
     }
 }

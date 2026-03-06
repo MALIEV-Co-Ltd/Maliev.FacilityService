@@ -46,7 +46,7 @@ public class ChangeEquipmentStatusCommandHandler
         equipment.TransitionTo(command.NewStatus);
         equipment.UpdatedAt = DateTime.UtcNow;
 
-        var updated = await _equipmentRepository.UpdateAsync(equipment, cancellationToken);
+        var updated = await _equipmentRepository.UpdateAsync(equipment, command.RowVersion, cancellationToken);
 
         await _eventPublisher.PublishEquipmentStatusChangedAsync(
             equipment.Id,

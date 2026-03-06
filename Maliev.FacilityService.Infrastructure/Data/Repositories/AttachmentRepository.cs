@@ -66,10 +66,25 @@ public class AttachmentRepository : IAttachmentRepository
         CancellationToken cancellationToken = default)
     {
         entity.UpdatedAt = DateTime.UtcNow;
-        
+
         _context.EquipmentAttachments.Update(entity);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
+        return entity;
+    }
+
+    /// <inheritdoc />
+    public async Task<EquipmentAttachment> UpdateAsync(
+        EquipmentAttachment entity,
+        uint rowVersion,
+        CancellationToken cancellationToken = default)
+    {
+        entity.UpdatedAt = DateTime.UtcNow;
+
+        _context.EquipmentAttachments.Update(entity);
+        _context.Entry(entity).Property("xmin").OriginalValue = rowVersion;
+        await _context.SaveChangesAsync(cancellationToken);
+
         return entity;
     }
 
@@ -84,7 +99,13 @@ public class AttachmentRepository : IAttachmentRepository
 
         _context.EquipmentAttachments.Remove(entity);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return true;
+    }
+
+    /// <inheritdoc />
+    public void SetXminOriginalValue(EquipmentAttachment entity, uint rowVersion)
+    {
+        _context.Entry(entity).Property("xmin").OriginalValue = rowVersion;
     }
 }

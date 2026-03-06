@@ -73,7 +73,7 @@ public class UpdateEquipmentCommandHandlerTests
             .ReturnsAsync(existingEquipment);
 
         _mockRepository
-            .Setup(r => r.UpdateAsync(existingEquipment, It.IsAny<CancellationToken>()))
+            .Setup(r => r.UpdateAsync(existingEquipment, It.IsAny<uint>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(updatedEquipment);
 
         var result = await _handler.HandleAsync(command, CancellationToken.None);
@@ -90,7 +90,7 @@ public class UpdateEquipmentCommandHandlerTests
         Assert.Equal(command.NextServiceDueDate, result.NextServiceDueDate);
 
         _mockRepository.Verify(r => r.GetByIdAsync(equipmentId, It.IsAny<CancellationToken>()), Times.Once);
-        _mockRepository.Verify(r => r.UpdateAsync(existingEquipment, It.IsAny<CancellationToken>()), Times.Once);
+        _mockRepository.Verify(r => r.UpdateAsync(existingEquipment, It.IsAny<uint>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -121,7 +121,7 @@ public class UpdateEquipmentCommandHandlerTests
         Assert.Equal(equipmentId, exception.EquipmentId);
 
         _mockRepository.Verify(r => r.GetByIdAsync(equipmentId, It.IsAny<CancellationToken>()), Times.Once);
-        _mockRepository.Verify(r => r.UpdateAsync(It.IsAny<Equipment>(), It.IsAny<CancellationToken>()), Times.Never);
+        _mockRepository.Verify(r => r.UpdateAsync(It.IsAny<Equipment>(), It.IsAny<uint>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -158,13 +158,13 @@ public class UpdateEquipmentCommandHandlerTests
             .ReturnsAsync(existingEquipment);
 
         _mockRepository
-            .Setup(r => r.UpdateAsync(existingEquipment, It.IsAny<CancellationToken>()))
+            .Setup(r => r.UpdateAsync(existingEquipment, It.IsAny<uint>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new DbUpdateConcurrencyException("Concurrency conflict"));
 
         var exception = await Assert.ThrowsAsync<DbUpdateConcurrencyException>(
             () => _handler.HandleAsync(command, CancellationToken.None));
 
         _mockRepository.Verify(r => r.GetByIdAsync(equipmentId, It.IsAny<CancellationToken>()), Times.Once);
-        _mockRepository.Verify(r => r.UpdateAsync(existingEquipment, It.IsAny<CancellationToken>()), Times.Once);
+        _mockRepository.Verify(r => r.UpdateAsync(existingEquipment, It.IsAny<uint>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

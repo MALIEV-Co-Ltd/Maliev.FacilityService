@@ -63,11 +63,15 @@ public class ApproveLoanIntegrationTests : IAsyncLifetime
         await _context.EquipmentLoans.AddAsync(loan);
         await _context.SaveChangesAsync();
 
+        var equipmentRowVersion = (uint)_context.Entry(equipment).Property("xmin").CurrentValue!;
+        var loanRowVersion = (uint)_context.Entry(loan).Property("xmin").CurrentValue!;
+
         var command = new ApproveLoanCommand(
             LoanId: loan.Id,
             ApprovedByEmployeeId: Guid.NewGuid(),
             BorrowerDisplayName: "Test Customer",
-            RowVersion: 1);
+            EquipmentRowVersion: equipmentRowVersion,
+            LoanRowVersion: loanRowVersion);
 
         var result = await _handler.HandleAsync(command, CancellationToken.None);
 
@@ -109,7 +113,8 @@ public class ApproveLoanIntegrationTests : IAsyncLifetime
             LoanId: nonExistentLoanId,
             ApprovedByEmployeeId: Guid.NewGuid(),
             BorrowerDisplayName: "Test Borrower",
-            RowVersion: 1);
+            EquipmentRowVersion: 1,
+            LoanRowVersion: 1);
 
         await Assert.ThrowsAsync<KeyNotFoundException>(
             () => _handler.HandleAsync(command, CancellationToken.None));

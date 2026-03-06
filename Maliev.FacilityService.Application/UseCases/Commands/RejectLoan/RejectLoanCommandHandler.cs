@@ -47,7 +47,7 @@ public class RejectLoanCommandHandler
         var equipment = await _equipmentRepository.GetByIdAsync(loan.EquipmentId, cancellationToken);
 
         loan.LoanStatus = LoanStatus.Rejected;
-        var updated = await _loanRepository.UpdateAsync(loan, cancellationToken);
+        var updated = await _loanRepository.UpdateAsync(loan, command.RowVersion, cancellationToken);
 
         return updated.ToDto(equipment?.AssetCode ?? string.Empty);
     }

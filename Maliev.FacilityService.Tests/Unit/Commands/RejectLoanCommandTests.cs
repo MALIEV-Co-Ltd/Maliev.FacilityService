@@ -34,7 +34,7 @@ public class RejectLoanCommandHandlerTests
             .ReturnsAsync(loan);
 
         _loanRepositoryMock
-            .Setup(r => r.UpdateAsync(loan, It.IsAny<CancellationToken>()))
+            .Setup(r => r.UpdateAsync(loan, It.IsAny<uint>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(loan);
 
         var command = new RejectLoanCommand(loanId, "Test rejection reason", 1);
@@ -43,7 +43,7 @@ public class RejectLoanCommandHandlerTests
         Assert.NotNull(result);
         Assert.Equal(LoanStatus.Rejected, result.LoanStatus);
         _loanRepositoryMock.Verify(
-            r => r.UpdateAsync(loan, It.IsAny<CancellationToken>()),
+            r => r.UpdateAsync(loan, It.IsAny<uint>(), It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
@@ -62,7 +62,7 @@ public class RejectLoanCommandHandlerTests
             () => _handler.HandleAsync(command));
 
         _loanRepositoryMock.Verify(
-            r => r.UpdateAsync(It.IsAny<EquipmentLoan>(), It.IsAny<CancellationToken>()),
+            r => r.UpdateAsync(It.IsAny<EquipmentLoan>(), It.IsAny<uint>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
 
@@ -83,7 +83,7 @@ public class RejectLoanCommandHandlerTests
             () => _handler.HandleAsync(command));
 
         _loanRepositoryMock.Verify(
-            r => r.UpdateAsync(It.IsAny<EquipmentLoan>(), It.IsAny<CancellationToken>()),
+            r => r.UpdateAsync(It.IsAny<EquipmentLoan>(), It.IsAny<uint>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
 

@@ -249,7 +249,8 @@ public class CreateLoanCommandTests
             LoanId: loanId,
             ApprovedByEmployeeId: approvedByEmployeeId,
             BorrowerDisplayName: "Test Employee",
-            RowVersion: 1);
+            EquipmentRowVersion: 1,
+            LoanRowVersion: 1);
 
         var loan = new EquipmentLoan
         {
@@ -286,11 +287,11 @@ public class CreateLoanCommandTests
             .ReturnsAsync(equipment);
 
         _equipmentRepositoryMock
-            .Setup(x => x.UpdateAsync(It.IsAny<Equipment>(), It.IsAny<CancellationToken>()))
+            .Setup(x => x.UpdateAsync(It.IsAny<Equipment>(), It.IsAny<uint>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(equipment);
 
         _loanRepositoryMock
-            .Setup(x => x.UpdateAsync(It.IsAny<EquipmentLoan>(), It.IsAny<CancellationToken>()))
+            .Setup(x => x.UpdateAsync(It.IsAny<EquipmentLoan>(), It.IsAny<uint>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(loan);
 
         var result = await _approveHandler.HandleAsync(command, CancellationToken.None);
@@ -300,11 +301,11 @@ public class CreateLoanCommandTests
         Assert.Equal(approvedByEmployeeId, loan.ApprovedByEmployeeId);
 
         _equipmentRepositoryMock.Verify(
-            x => x.UpdateAsync(It.IsAny<Equipment>(), It.IsAny<CancellationToken>()),
+            x => x.UpdateAsync(It.IsAny<Equipment>(), It.IsAny<uint>(), It.IsAny<CancellationToken>()),
             Times.Once);
 
         _loanRepositoryMock.Verify(
-            x => x.UpdateAsync(It.IsAny<EquipmentLoan>(), It.IsAny<CancellationToken>()),
+            x => x.UpdateAsync(It.IsAny<EquipmentLoan>(), It.IsAny<uint>(), It.IsAny<CancellationToken>()),
             Times.Once);
 
         _eventPublisherMock.Verify(
@@ -350,7 +351,8 @@ public class CreateLoanCommandTests
             LoanId: loanId,
             ApprovedByEmployeeId: approvedByEmployeeId,
             BorrowerDisplayName: "Test Customer",
-            RowVersion: 1);
+            EquipmentRowVersion: 1,
+            LoanRowVersion: 1);
 
         var loan = new EquipmentLoan
         {
@@ -387,11 +389,11 @@ public class CreateLoanCommandTests
             .ReturnsAsync(equipment);
 
         _equipmentRepositoryMock
-            .Setup(x => x.UpdateAsync(It.IsAny<Equipment>(), It.IsAny<CancellationToken>()))
+            .Setup(x => x.UpdateAsync(It.IsAny<Equipment>(), It.IsAny<uint>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(equipment);
 
         _loanRepositoryMock
-            .Setup(x => x.UpdateAsync(It.IsAny<EquipmentLoan>(), It.IsAny<CancellationToken>()))
+            .Setup(x => x.UpdateAsync(It.IsAny<EquipmentLoan>(), It.IsAny<uint>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(loan);
 
         var result = await _approveHandler.HandleAsync(command, CancellationToken.None);
@@ -429,7 +431,8 @@ public class CreateLoanCommandTests
             LoanId: loanId,
             ApprovedByEmployeeId: approvedByEmployeeId,
             BorrowerDisplayName: "Test Borrower",
-            RowVersion: 1);
+            EquipmentRowVersion: 1,
+            LoanRowVersion: 1);
 
         _loanRepositoryMock
             .Setup(x => x.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
@@ -452,7 +455,8 @@ public class CreateLoanCommandTests
             LoanId: loanId,
             ApprovedByEmployeeId: approvedByEmployeeId,
             BorrowerDisplayName: "Test Borrower",
-            RowVersion: 1);
+            EquipmentRowVersion: 1,
+            LoanRowVersion: 1);
 
         var loan = new EquipmentLoan
         {

@@ -41,7 +41,7 @@ public class UpdateAttachmentCommandHandler
         attachment.ConditionNotes = command.ConditionNotes;
         attachment.UpdatedAt = DateTime.UtcNow;
 
-        var updated = await _attachmentRepository.UpdateAsync(attachment, cancellationToken);
+        var updated = await _attachmentRepository.UpdateAsync(attachment, command.RowVersion, cancellationToken);
         return updated.ToDto();
     }
 }

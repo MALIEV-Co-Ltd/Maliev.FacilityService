@@ -57,11 +57,13 @@ public class ChangeEquipmentStatusIntegrationTests : IAsyncLifetime
         await context.Equipments.AddAsync(equipment);
         await context.SaveChangesAsync();
 
+        var rowVersion = (uint)context.Entry(equipment).Property("xmin").CurrentValue!;
+
         var command = new ChangeEquipmentStatusCommand(
             equipment.Id,
             EquipmentStatus.UnderMaintenance,
             "Routine maintenance",
-            1);
+            rowVersion);
 
         var result = await handler.HandleAsync(command);
 
@@ -97,11 +99,13 @@ public class ChangeEquipmentStatusIntegrationTests : IAsyncLifetime
         await context.Equipments.AddAsync(equipment);
         await context.SaveChangesAsync();
 
+        var rowVersion = (uint)context.Entry(equipment).Property("xmin").CurrentValue!;
+
         var command = new ChangeEquipmentStatusCommand(
             equipment.Id,
             EquipmentStatus.Active,
             "Attempting to reactivate",
-            1);
+            rowVersion);
 
         await Assert.ThrowsAsync<InvalidStatusTransitionException>(
             () => handler.HandleAsync(command));
@@ -135,11 +139,13 @@ public class ChangeEquipmentStatusIntegrationTests : IAsyncLifetime
         await context.Equipments.AddAsync(equipment);
         await context.SaveChangesAsync();
 
+        var rowVersion = (uint)context.Entry(equipment).Property("xmin").CurrentValue!;
+
         var command = new ChangeEquipmentStatusCommand(
             equipment.Id,
             EquipmentStatus.OnLoan,
             "Loan to employee",
-            1);
+            rowVersion);
 
         await handler.HandleAsync(command);
 

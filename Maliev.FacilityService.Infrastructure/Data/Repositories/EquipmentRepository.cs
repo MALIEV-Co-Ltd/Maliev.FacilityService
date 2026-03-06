@@ -24,8 +24,10 @@ public class EquipmentRepository : IEquipmentRepository
     /// <inheritdoc />
     public async Task<Equipment?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.Equipments
+        var equipment = await _context.Equipments
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+
+        return equipment;
     }
 
     /// <inheritdoc />
@@ -129,6 +131,22 @@ public class EquipmentRepository : IEquipmentRepository
     }
 
     /// <inheritdoc />
+    public async Task<Equipment> UpdateAsync(Equipment entity, uint rowVersion, CancellationToken cancellationToken = default)
+    {
+        entity.UpdatedAt = DateTime.UtcNow;
+        
+        var entry = _context.Entry(entity);
+        if (entry.State == EntityState.Detached)
+        {
+            _context.Equipments.Update(entity);
+        }
+        entry.Property("xmin").OriginalValue = rowVersion;
+        await _context.SaveChangesAsync(cancellationToken);
+        
+        return entity;
+    }
+
+    /// <inheritdoc />
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var entity = await _context.Equipments.FindAsync([id], cancellationToken);
@@ -139,7 +157,13 @@ public class EquipmentRepository : IEquipmentRepository
 
         _context.Equipments.Remove(entity);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return true;
+    }
+
+    /// <inheritdoc />
+    public void SetXminOriginalValue(Equipment entity, uint rowVersion)
+    {
+        _context.Entry(entity).Property("xmin").OriginalValue = rowVersion;
     }
 }

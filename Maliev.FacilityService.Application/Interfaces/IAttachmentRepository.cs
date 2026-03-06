@@ -48,10 +48,32 @@ public interface IAttachmentRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Updates an existing attachment and enforces optimistic concurrency using the provided xmin row version.
+    /// The row version is set as the OriginalValue so EF Core includes it in the WHERE clause.
+    /// </summary>
+    /// <param name="entity">The attachment entity to update.</param>
+    /// <param name="rowVersion">The xmin value the client last saw.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The updated attachment entity.</returns>
+    Task<EquipmentAttachment> UpdateAsync(
+        EquipmentAttachment entity,
+        uint rowVersion,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Deletes an attachment by its unique identifier.
     /// </summary>
     /// <param name="id">The unique identifier of the attachment to delete.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>True if the attachment was deleted, otherwise false.</returns>
     Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Sets the xmin OriginalValue on the tracked entity so that EF Core enforces
+    /// the client-supplied row version on the next SaveChanges call.
+    /// Must be called after loading the entity and before calling UpdateAsync.
+    /// </summary>
+    /// <param name="entity">The tracked attachment entity.</param>
+    /// <param name="rowVersion">The xmin value the client last saw.</param>
+    void SetXminOriginalValue(EquipmentAttachment entity, uint rowVersion);
 }

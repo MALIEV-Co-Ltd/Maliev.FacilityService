@@ -44,7 +44,7 @@ public class ReturnLoanCommandHandlerTests
             .ReturnsAsync(equipment);
 
         _equipmentRepositoryMock
-            .Setup(r => r.UpdateAsync(equipment, It.IsAny<CancellationToken>()))
+            .Setup(r => r.UpdateAsync(equipment, It.IsAny<uint>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(equipment);
 
         _loanRepositoryMock
@@ -57,7 +57,7 @@ public class ReturnLoanCommandHandlerTests
         Assert.NotNull(result);
         Assert.Equal(LoanStatus.Returned, result.LoanStatus);
         _equipmentRepositoryMock.Verify(
-            r => r.UpdateAsync(equipment, It.IsAny<CancellationToken>()),
+            r => r.UpdateAsync(equipment, It.IsAny<uint>(), It.IsAny<CancellationToken>()),
             Times.Once);
         _eventPublisherMock.Verify(
             p => p.PublishEquipmentStatusChangedAsync(

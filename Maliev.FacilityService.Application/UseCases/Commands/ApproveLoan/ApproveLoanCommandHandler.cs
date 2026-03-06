@@ -56,8 +56,8 @@ public class ApproveLoanCommandHandler
         equipment.TransitionTo(EquipmentStatus.OnLoan);
         equipment.UpdatedAt = DateTime.UtcNow;
 
-        await _equipmentRepository.UpdateAsync(equipment, cancellationToken);
-        var updatedLoan = await _loanRepository.UpdateAsync(loan, cancellationToken);
+        await _equipmentRepository.UpdateAsync(equipment, command.EquipmentRowVersion, cancellationToken);
+        var updatedLoan = await _loanRepository.UpdateAsync(loan, command.LoanRowVersion, cancellationToken);
 
         // Publish equipment status changed event
         await _eventPublisher.PublishEquipmentStatusChangedAsync(

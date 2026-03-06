@@ -46,6 +46,10 @@ dotnet ef migrations add <MigrationName> --project Maliev.FacilityService.Infras
 dotnet ef database update --project Maliev.FacilityService.Infrastructure --startup-project Maliev.FacilityService.Api
 ```
 
+## Package Management Rules
+
+- **EF Core Design**: `Microsoft.EntityFrameworkCore.Design` must ONLY be in the Infrastructure project. Do NOT add it to the Api project. Use `--startup-project Maliev.FacilityService.Api` when running migrations - the package will be resolved transitively from Infrastructure. The Infrastructure project must NOT have `<PrivateAssets>all</PrivateAssets>` on this package.
+
 ## Code Style
 
 - All public methods, properties, and classes require XML documentation comments (`///`)

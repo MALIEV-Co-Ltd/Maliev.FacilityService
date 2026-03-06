@@ -12,7 +12,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="MassTransit.TestFramework" Version="8.5.7" />
+    <PackageReference Include="MassTransit.TestFramework" Version="[8.5.8, 9.0.0)" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.0" />
@@ -34,7 +34,6 @@
     <ProjectReference Include="..\Maliev.FacilityService.Api\Maliev.FacilityService.Api.csproj" />
     <ProjectReference Include="..\Maliev.FacilityService.Application\Maliev.FacilityService.Application.csproj" />
     <ProjectReference Include="..\Maliev.FacilityService.Domain\Maliev.FacilityService.Domain.csproj" />
-    <ProjectReference Include="..\Maliev.FacilityService.Infrastructure\Maliev.FacilityService.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

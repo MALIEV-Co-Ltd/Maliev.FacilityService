@@ -73,12 +73,31 @@ public interface IEquipmentRepository
     Task<Equipment> UpdateAsync(Equipment entity, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Updates an existing equipment and enforces optimistic concurrency using the provided xmin row version.
+    /// The row version is set as the OriginalValue so EF Core includes it in the WHERE clause.
+    /// </summary>
+    /// <param name="entity">The equipment entity to update.</param>
+    /// <param name="rowVersion">The xmin value the client last saw.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The updated equipment entity.</returns>
+    Task<Equipment> UpdateAsync(Equipment entity, uint rowVersion, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Deletes an equipment by its unique identifier.
     /// </summary>
     /// <param name="id">The unique identifier of the equipment to delete.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>True if the equipment was deleted, otherwise false.</returns>
     Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Sets the xmin OriginalValue on the tracked entity so that EF Core enforces
+    /// the client-supplied row version on the next SaveChanges call.
+    /// Must be called after loading the entity and before calling UpdateAsync.
+    /// </summary>
+    /// <param name="entity">The tracked equipment entity.</param>
+    /// <param name="rowVersion">The xmin value the client last saw.</param>
+    void SetXminOriginalValue(Equipment entity, uint rowVersion);
 }
 
 /// <summary>

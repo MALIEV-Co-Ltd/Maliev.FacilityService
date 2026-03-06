@@ -48,6 +48,7 @@ public class UpdateEquipmentIntegrationTests : IAsyncLifetime
     public async Task HandleAsync_ValidUpdate_EquipmentNameAndBrandArePersisted()
     {
         Guid equipmentId;
+        uint rowVersion;
         using (var context1 = CreateDbContext())
         {
             var repository = new EquipmentRepository(context1);
@@ -66,6 +67,8 @@ public class UpdateEquipmentIntegrationTests : IAsyncLifetime
 
             await repository.AddAsync(equipment);
             equipmentId = equipment.Id;
+
+            rowVersion = (uint)context1.Entry(equipment).Property("xmin").CurrentValue!;
         }
 
         using (var context2 = CreateDbContext())
@@ -85,7 +88,7 @@ public class UpdateEquipmentIntegrationTests : IAsyncLifetime
                 WarrantyExpiryDate: new DateOnly(2026, 1, 15),
                 NextServiceDueDate: new DateOnly(2025, 7, 15),
                 Spec: null,
-                RowVersion: 0);
+                RowVersion: rowVersion);
 
             var result = await handler.HandleAsync(command);
 

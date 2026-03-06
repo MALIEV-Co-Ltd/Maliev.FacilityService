@@ -83,7 +83,10 @@ public class FacilityDbContext : DbContext
             entity.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
             entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").IsRequired();
 
-            entity.Property<uint>("xmin").HasColumnName("xmin").IsRowVersion();
+            entity.Property<uint>("xmin")
+                .IsRowVersion()
+                .HasColumnType("xid")
+                .HasColumnName("xmin");
 
             entity.HasIndex(e => e.AssetCode).IsUnique();
             entity.HasIndex(e => e.Name);
@@ -245,7 +248,10 @@ public class FacilityDbContext : DbContext
             entity.Property(e => e.ReturnConditionNotes).HasColumnName("return_condition_notes").HasMaxLength(1000);
             entity.Property(e => e.LoanStatus).HasColumnName("loan_status").HasConversion<string>().HasMaxLength(50).IsRequired();
 
-            entity.Property<uint>("xmin").HasColumnName("xmin").IsRowVersion();
+            entity.Property<uint>("xmin")
+                .IsRowVersion()
+                .HasColumnType("xid")
+                .HasColumnName("xmin");
 
             entity.HasIndex(e => e.EquipmentId);
             entity.HasIndex(e => e.LoanStatus);
@@ -296,7 +302,10 @@ public class FacilityDbContext : DbContext
             entity.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
             entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").IsRequired();
 
-            entity.Property<uint>("xmin").HasColumnName("xmin").IsRowVersion();
+            entity.Property<uint>("xmin")
+                .IsRowVersion()
+                .HasColumnType("xid")
+                .HasColumnName("xmin");
 
             entity.HasIndex(e => e.EquipmentId);
             entity.HasIndex(e => e.IsActive);

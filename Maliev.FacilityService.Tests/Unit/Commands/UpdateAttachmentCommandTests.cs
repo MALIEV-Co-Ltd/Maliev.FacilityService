@@ -30,7 +30,7 @@ public class UpdateAttachmentCommandHandlerTests
             .ReturnsAsync(new List<EquipmentAttachment> { attachment });
 
         _attachmentRepositoryMock
-            .Setup(r => r.UpdateAsync(attachment, It.IsAny<CancellationToken>()))
+            .Setup(r => r.UpdateAsync(attachment, It.IsAny<uint>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(attachment);
 
         var command = new UpdateAttachmentCommand(
@@ -49,7 +49,7 @@ public class UpdateAttachmentCommandHandlerTests
         Assert.Equal("SN-Updated-001", attachment.SerialNumber);
         Assert.True(attachment.IsActive);
         _attachmentRepositoryMock.Verify(
-            r => r.UpdateAsync(attachment, It.IsAny<CancellationToken>()),
+            r => r.UpdateAsync(attachment, It.IsAny<uint>(), It.IsAny<CancellationToken>()),
             Times.Once);
     }
 

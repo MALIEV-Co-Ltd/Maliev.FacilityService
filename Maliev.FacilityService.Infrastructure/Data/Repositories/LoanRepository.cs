@@ -24,8 +24,10 @@ public class LoanRepository : ILoanRepository
     /// <inheritdoc />
     public async Task<EquipmentLoan?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.EquipmentLoans
+        var loan = await _context.EquipmentLoans
             .FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
+
+        return loan;
     }
 
     /// <inheritdoc />
@@ -81,5 +83,25 @@ public class LoanRepository : ILoanRepository
         await _context.SaveChangesAsync(cancellationToken);
 
         return entity;
+    }
+
+    /// <inheritdoc />
+    public async Task<EquipmentLoan> UpdateAsync(EquipmentLoan entity, uint rowVersion, CancellationToken cancellationToken = default)
+    {
+        var entry = _context.Entry(entity);
+        if (entry.State == EntityState.Detached)
+        {
+            _context.EquipmentLoans.Update(entity);
+        }
+        entry.Property("xmin").OriginalValue = rowVersion;
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return entity;
+    }
+
+    /// <inheritdoc />
+    public void SetXminOriginalValue(EquipmentLoan entity, uint rowVersion)
+    {
+        _context.Entry(entity).Property("xmin").OriginalValue = rowVersion;
     }
 }

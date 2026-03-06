@@ -34,7 +34,7 @@ public class ChangeEquipmentStatusCommandHandlerTests
             .ReturnsAsync(equipment);
 
         _equipmentRepositoryMock
-            .Setup(r => r.UpdateAsync(equipment, It.IsAny<CancellationToken>()))
+            .Setup(r => r.UpdateAsync(equipment, It.IsAny<uint>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(equipment);
 
         var command = new ChangeEquipmentStatusCommand(
@@ -48,7 +48,7 @@ public class ChangeEquipmentStatusCommandHandlerTests
         Assert.NotNull(result);
         Assert.Equal(EquipmentStatus.UnderMaintenance, result.Status);
         _equipmentRepositoryMock.Verify(
-            r => r.UpdateAsync(equipment, It.IsAny<CancellationToken>()),
+            r => r.UpdateAsync(equipment, It.IsAny<uint>(), It.IsAny<CancellationToken>()),
             Times.Once);
         _eventPublisherMock.Verify(
             p => p.PublishEquipmentStatusChangedAsync(
@@ -82,7 +82,7 @@ public class ChangeEquipmentStatusCommandHandlerTests
             () => _handler.HandleAsync(command));
 
         _equipmentRepositoryMock.Verify(
-            r => r.UpdateAsync(It.IsAny<Equipment>(), It.IsAny<CancellationToken>()),
+            r => r.UpdateAsync(It.IsAny<Equipment>(), It.IsAny<uint>(), It.IsAny<CancellationToken>()),
             Times.Never);
         _eventPublisherMock.Verify(
             p => p.PublishEquipmentStatusChangedAsync(
@@ -115,7 +115,7 @@ public class ChangeEquipmentStatusCommandHandlerTests
             () => _handler.HandleAsync(command));
 
         _equipmentRepositoryMock.Verify(
-            r => r.UpdateAsync(It.IsAny<Equipment>(), It.IsAny<CancellationToken>()),
+            r => r.UpdateAsync(It.IsAny<Equipment>(), It.IsAny<uint>(), It.IsAny<CancellationToken>()),
             Times.Never);
         _eventPublisherMock.Verify(
             p => p.PublishEquipmentStatusChangedAsync(
