@@ -173,7 +173,7 @@ public class FacilityServiceTestFactory : WebApplicationFactory<Program>, IAsync
     private async Task ApplyMigrationsAsync()
     {
         await using var context = CreateDbContext();
-        await context.Database.EnsureCreatedAsync();
+        await context.Database.MigrateAsync();
     }
 
     public FacilityDbContext GetDbContext()
