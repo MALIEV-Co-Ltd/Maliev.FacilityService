@@ -59,7 +59,7 @@ namespace Maliev.FacilityService.Infrastructure.Data.Migrations
                     MessageId = table.Column<Guid>(type: "uuid", nullable: false),
                     ConsumerId = table.Column<Guid>(type: "uuid", nullable: false),
                     LockId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "bytea", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "bytea", rowVersion: true, nullable: true),
                     Received = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ReceiveCount = table.Column<int>(type: "integer", nullable: false),
                     ExpirationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -537,6 +537,11 @@ namespace Maliev.FacilityService.Infrastructure.Data.Migrations
                 name: "IX_equipments_status",
                 table: "equipments",
                 column: "status");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InboxState_Delivered",
+                table: "InboxState",
+                column: "Delivered");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OutboxMessage_EnqueueTime",

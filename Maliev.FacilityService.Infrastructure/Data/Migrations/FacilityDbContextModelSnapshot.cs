@@ -395,9 +395,13 @@ namespace Maliev.FacilityService.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("bytea");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Delivered");
 
                     b.ToTable("InboxState");
                 });

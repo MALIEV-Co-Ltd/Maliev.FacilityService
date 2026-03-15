@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Maliev.FacilityService.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(FacilityDbContext))]
-    [Migration("20260314183155_InitialCreate")]
+    [Migration("20260315040121_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -398,9 +398,13 @@ namespace Maliev.FacilityService.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("bytea");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Delivered");
 
                     b.ToTable("InboxState");
                 });

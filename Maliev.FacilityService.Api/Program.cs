@@ -37,6 +37,9 @@ builder.AddStandardOpenApi(
 
 var app = builder.Build();
 
+// --- Database Migration ---
+await app.MigrateDatabaseAsync<FacilityDbContext>();
+
 // --- Middleware Pipeline ---
 app.UseMiddleware<DomainExceptionMiddleware>();
 app.UseMiddleware<ConcurrencyExceptionMiddleware>();

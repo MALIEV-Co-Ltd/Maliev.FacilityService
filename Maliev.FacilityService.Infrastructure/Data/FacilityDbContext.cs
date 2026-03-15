@@ -60,6 +60,7 @@ public class FacilityDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.AddInboxStateEntity();
         modelBuilder.AddOutboxMessageEntity();
         modelBuilder.AddOutboxStateEntity();
 
