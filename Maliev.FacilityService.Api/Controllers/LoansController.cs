@@ -15,7 +15,7 @@ namespace Maliev.FacilityService.Api.Controllers;
 /// Manages equipment loan requests including employee and customer lending with approval workflow.
 /// </summary>
 [ApiController]
-[ApiVersion("1.0")]
+[ApiVersion("1")]
 [Route("facility/v{version:apiVersion}")]
 public class LoansController : FacilityControllerBase
 {

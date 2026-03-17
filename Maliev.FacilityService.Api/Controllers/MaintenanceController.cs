@@ -12,7 +12,7 @@ namespace Maliev.FacilityService.Api.Controllers;
 /// Manages maintenance log entries for equipment.
 /// </summary>
 [ApiController]
-[ApiVersion("1.0")]
+[ApiVersion("1")]
 [Route("facility/v{version:apiVersion}/equipments/{id:guid}/maintenance")]
 public class MaintenanceController : FacilityControllerBase
 {

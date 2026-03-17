@@ -13,7 +13,7 @@ namespace Maliev.FacilityService.Api.Controllers;
 /// Manages CNC machine attachments (tools, fixtures, collets, etc.) for equipment.
 /// </summary>
 [ApiController]
-[ApiVersion("1.0")]
+[ApiVersion("1")]
 [Route("facility/v{version:apiVersion}/equipments/{equipmentId:guid}/attachments")]
 public class AttachmentsController : FacilityControllerBase
 {

@@ -20,7 +20,7 @@ namespace Maliev.FacilityService.Api.Controllers;
 /// Manages equipment registration, lifecycle, notes, and queries across all 10 equipment categories.
 /// </summary>
 [ApiController]
-[ApiVersion("1.0")]
+[ApiVersion("1")]
 [Route("facility/v{version:apiVersion}/equipments")]
 public class EquipmentsController : ControllerBase
 {
