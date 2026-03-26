@@ -1,7 +1,10 @@
 using Maliev.FacilityService.Api.Middleware;
+using Maliev.FacilityService.Api.Services;
 using Maliev.FacilityService.Application;
 using Maliev.FacilityService.Infrastructure;
 using Maliev.FacilityService.Infrastructure.Data;
+using Maliev.FacilityService.Infrastructure.Data.SeedData;
+using Maliev.Aspire.ServiceDefaults.IAM;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +27,9 @@ builder.AddMassTransitWithRabbitMq(configure: x =>
     });
 });
 
+// --- IAM Registration ---
+builder.Services.AddIAMRegistration<FacilityIAMRegistrationService>("facility");
+
 // --- API Configuration ---
 builder.Services.AddControllers();
 
@@ -39,6 +45,9 @@ var app = builder.Build();
 
 // --- Database Migration ---
 await app.MigrateDatabaseAsync<FacilityDbContext>();
+
+// --- Seed Equipment Data ---
+await app.SeedEquipmentsAsync();
 
 // --- Middleware Pipeline ---
 app.UseMiddleware<DomainExceptionMiddleware>();
