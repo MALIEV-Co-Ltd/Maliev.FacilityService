@@ -6,6 +6,7 @@ using Maliev.FacilityService.Infrastructure.Data;
 using Maliev.FacilityService.Infrastructure.Data.SeedData;
 using Maliev.Aspire.ServiceDefaults.IAM;
 using MassTransit;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,11 @@ builder.AddMassTransitWithRabbitMq(configure: x =>
 builder.Services.AddIAMRegistration<FacilityIAMRegistrationService>("facility");
 
 // --- API Configuration ---
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 // --- Authentication & Authorization ---
 builder.AddJwtAuthentication();
