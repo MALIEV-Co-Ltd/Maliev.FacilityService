@@ -66,6 +66,7 @@ public class EquipmentRepository : IEquipmentRepository
         if (pagination != null)
         {
             query = query
+                .OrderBy(e => e.Id)
                 .Skip((pagination.Page - 1) * pagination.PageSize)
                 .Take(pagination.PageSize);
         }
