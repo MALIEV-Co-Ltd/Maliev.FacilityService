@@ -1,5 +1,6 @@
 <Project>
 	<PropertyGroup>
+		<SharedLibraryVersion Condition="'$(SharedLibraryVersion)' == ''">1.0.*-*</SharedLibraryVersion>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
