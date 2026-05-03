@@ -53,10 +53,10 @@ public class AttachmentRepository : IAttachmentRepository
     {
         entity.CreatedAt = DateTime.UtcNow;
         entity.UpdatedAt = DateTime.UtcNow;
-        
+
         await _context.EquipmentAttachments.AddAsync(entity, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return entity;
     }
 

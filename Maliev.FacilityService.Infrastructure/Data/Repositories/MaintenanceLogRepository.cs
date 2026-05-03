@@ -39,10 +39,10 @@ public class MaintenanceLogRepository : IMaintenanceLogRepository
         CancellationToken cancellationToken = default)
     {
         entity.CreatedAt = DateTime.UtcNow;
-        
+
         await _context.EquipmentMaintenanceLogs.AddAsync(entity, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return entity;
     }
 }
