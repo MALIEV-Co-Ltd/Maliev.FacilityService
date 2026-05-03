@@ -113,10 +113,10 @@ public class EquipmentRepository : IEquipmentRepository
     {
         entity.CreatedAt = DateTime.UtcNow;
         entity.UpdatedAt = DateTime.UtcNow;
-        
+
         await _context.Equipments.AddAsync(entity, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return entity;
     }
 
@@ -124,10 +124,10 @@ public class EquipmentRepository : IEquipmentRepository
     public async Task<Equipment> UpdateAsync(Equipment entity, CancellationToken cancellationToken = default)
     {
         entity.UpdatedAt = DateTime.UtcNow;
-        
+
         _context.Equipments.Update(entity);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return entity;
     }
 
@@ -135,7 +135,7 @@ public class EquipmentRepository : IEquipmentRepository
     public async Task<Equipment> UpdateAsync(Equipment entity, uint rowVersion, CancellationToken cancellationToken = default)
     {
         entity.UpdatedAt = DateTime.UtcNow;
-        
+
         var entry = _context.Entry(entity);
         if (entry.State == EntityState.Detached)
         {
@@ -143,7 +143,7 @@ public class EquipmentRepository : IEquipmentRepository
         }
         entry.Property("xmin").OriginalValue = rowVersion;
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return entity;
     }
 
