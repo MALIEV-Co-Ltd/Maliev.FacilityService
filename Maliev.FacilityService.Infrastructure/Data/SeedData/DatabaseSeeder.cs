@@ -23,17 +23,25 @@ public static class DatabaseSeeder
 
         try
         {
-            if (await context.Equipments.AnyAsync())
+            var equipment = EquipmentSeedData.GetAll().ToList();
+            var existingIds = await context.Equipments
+                .AsNoTracking()
+                .Select(equipment => equipment.Id)
+                .ToListAsync();
+            var missingEquipment = equipment
+                .Where(equipment => !existingIds.Contains(equipment.Id))
+                .ToList();
+
+            if (missingEquipment.Count == 0)
             {
-                logger.LogInformation("Equipment table already has data. Skipping seed.");
+                logger.LogInformation("All seeded manufacturing equipment already exists. Skipping seed.");
                 return;
             }
 
             logger.LogInformation("Seeding manufacturing equipment...");
 
-            var equipment = EquipmentSeedData.GetAll().ToList();
             var now = DateTime.UtcNow;
-            foreach (var e in equipment)
+            foreach (var e in missingEquipment)
             {
                 e.CreatedAt = now;
                 e.UpdatedAt = now;
@@ -45,7 +53,7 @@ public static class DatabaseSeeder
                 await using var tx = await context.Database.BeginTransactionAsync();
 
                 // For TPT inheritance, just add to the base DbSet - EF Core handles the derived type tables automatically
-                foreach (var item in equipment)
+                foreach (var item in missingEquipment)
                 {
                     await context.Equipments.AddAsync(item);
                 }
@@ -54,7 +62,7 @@ public static class DatabaseSeeder
                 await tx.CommitAsync();
             });
 
-            logger.LogInformation("Seeded {Count} equipment items.", equipment.Count);
+            logger.LogInformation("Seeded {Count} equipment items.", missingEquipment.Count);
         }
         catch (Exception ex)
         {
