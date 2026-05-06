@@ -56,6 +56,9 @@ nunit-*.xml
 # IDE — Visual Studio
 .vs/
 *.user
+*.csproj.user
+*.rsuser
+*.DotSettings.user
 *.suo
 *.userosscache
 *.sln.docstates
