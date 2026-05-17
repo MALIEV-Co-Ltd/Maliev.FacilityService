@@ -48,6 +48,11 @@ public record EquipmentSummaryDto
     public decimal? PurchasePriceTHB { get; init; }
 
     /// <summary>
+    /// Next scheduled service date for planned maintenance.
+    /// </summary>
+    public DateOnly? NextServiceDueDate { get; init; }
+
+    /// <summary>
     /// Timestamp when the equipment record was last updated (UTC).
     /// </summary>
     public DateTime UpdatedAt { get; init; }

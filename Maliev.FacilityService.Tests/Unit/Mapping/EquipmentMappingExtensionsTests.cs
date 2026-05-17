@@ -20,6 +20,7 @@ public class EquipmentMappingExtensionsTests
             Category = EquipmentCategory.FdmPrinter,
             Status = EquipmentStatus.Active,
             PurchasePriceTHB = 25000m,
+            NextServiceDueDate = new DateOnly(2025, 6, 1),
             UpdatedAt = DateTime.UtcNow
         };
 
@@ -33,6 +34,7 @@ public class EquipmentMappingExtensionsTests
         Assert.Equal(equipment.Category, result.Category);
         Assert.Equal(equipment.Status, result.Status);
         Assert.Equal(equipment.PurchasePriceTHB, result.PurchasePriceTHB);
+        Assert.Equal(equipment.NextServiceDueDate, result.NextServiceDueDate);
         Assert.Equal(equipment.UpdatedAt, result.UpdatedAt);
     }
 

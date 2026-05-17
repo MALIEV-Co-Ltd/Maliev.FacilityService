@@ -25,6 +25,7 @@ public static class EquipmentMappingExtensions
             Category = equipment.Category,
             Status = equipment.Status,
             PurchasePriceTHB = equipment.PurchasePriceTHB,
+            NextServiceDueDate = equipment.NextServiceDueDate,
             UpdatedAt = equipment.UpdatedAt
         };
 
