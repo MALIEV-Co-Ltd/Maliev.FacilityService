@@ -1,3 +1,4 @@
+using Maliev.FacilityService.Application.DTOs;
 using Maliev.FacilityService.Domain.Enums;
 
 namespace Maliev.FacilityService.Application.UseCases.Commands.AddMaintenanceLog;
@@ -13,6 +14,7 @@ namespace Maliev.FacilityService.Application.UseCases.Commands.AddMaintenanceLog
 /// <param name="VendorName">Name of the vendor who performed the maintenance.</param>
 /// <param name="CostTHB">Cost of maintenance in Thai Baht.</param>
 /// <param name="NextServiceDueDate">Next scheduled service date.</param>
+/// <param name="Documents">Optional pre-uploaded maintenance document metadata.</param>
 public record AddMaintenanceLogCommand(
     Guid EquipmentId,
     MaintenanceType Type,
@@ -21,4 +23,5 @@ public record AddMaintenanceLogCommand(
     Guid LoggedByEmployeeId,
     string? VendorName,
     decimal? CostTHB,
-    DateOnly? NextServiceDueDate);
+    DateOnly? NextServiceDueDate,
+    IReadOnlyList<CreateMaintenanceLogDocumentDto>? Documents = null);

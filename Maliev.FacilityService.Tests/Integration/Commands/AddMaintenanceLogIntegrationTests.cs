@@ -102,6 +102,51 @@ public class AddMaintenanceLogIntegrationTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task AddMaintenanceLog_DocumentsArePersistedWithLog()
+    {
+        var testEquipment = await CreateTestEquipmentAsync();
+
+        using var context = CreateDbContext();
+        var equipmentRepository = new Maliev.FacilityService.Infrastructure.Data.Repositories.EquipmentRepository(context);
+        var maintenanceLogRepository = new Maliev.FacilityService.Infrastructure.Data.Repositories.MaintenanceLogRepository(context);
+
+        var command = new AddMaintenanceLogCommand(
+            testEquipment.Id,
+            MaintenanceType.Corrective,
+            "Replaced worn Z-axis bearings",
+            DateTime.UtcNow,
+            Guid.NewGuid(),
+            "Machine Service Co.",
+            4200.00m,
+            null,
+            [
+                new CreateMaintenanceLogDocumentDto
+                {
+                    FileName = "bearing-report.pdf",
+                    ContentType = "application/pdf",
+                    FileSizeBytes = 248_100,
+                    StoragePath = "equipment-maintenance/test/bearing-report.pdf"
+                }
+            ]);
+
+        var handler = new AddMaintenanceLogCommandHandler(equipmentRepository, maintenanceLogRepository);
+
+        var result = await handler.HandleAsync(command);
+
+        var document = Assert.Single(result.Documents);
+        Assert.Equal("bearing-report.pdf", document.FileName);
+        Assert.Equal("application/pdf", document.ContentType);
+        Assert.Equal(248_100, document.FileSizeBytes);
+        Assert.Equal("equipment-maintenance/test/bearing-report.pdf", document.StoragePath);
+
+        var persisted = await context.EquipmentMaintenanceLogs
+            .AsNoTracking()
+            .Include(log => log.Documents)
+            .SingleAsync(log => log.Id == result.Id);
+        Assert.Single(persisted.Documents);
+    }
+
+    [Fact]
     public async Task RetrieveMaintenanceLogsForEquipment_LogsReturnedInDescendingOrderByDate()
     {
         var testEquipment = await CreateTestEquipmentAsync();
@@ -158,5 +203,46 @@ public class AddMaintenanceLogIntegrationTests : IAsyncLifetime
         Assert.Equal(MaintenanceType.Corrective, result[1].Type);
         Assert.Equal("First maintenance", result[2].Description);
         Assert.Equal(MaintenanceType.Preventive, result[2].Type);
+    }
+
+    [Fact]
+    public async Task RetrieveMaintenanceLogsForEquipment_IncludesDocuments()
+    {
+        var testEquipment = await CreateTestEquipmentAsync();
+
+        using var context = CreateDbContext();
+        var maintenanceLogRepository = new Maliev.FacilityService.Infrastructure.Data.Repositories.MaintenanceLogRepository(context);
+
+        await maintenanceLogRepository.AddAsync(new EquipmentMaintenanceLog
+        {
+            Id = Guid.NewGuid(),
+            EquipmentId = testEquipment.Id,
+            Type = MaintenanceType.Inspection,
+            Description = "Annual calibration inspection",
+            OccurredAt = DateTime.UtcNow,
+            LoggedByEmployeeId = Guid.NewGuid(),
+            CreatedAt = DateTime.UtcNow,
+            Documents =
+            [
+                new EquipmentMaintenanceDocument
+                {
+                    Id = Guid.NewGuid(),
+                    FileName = "calibration-findings.pdf",
+                    ContentType = "application/pdf",
+                    FileSizeBytes = 98_240,
+                    StoragePath = "equipment-maintenance/test/calibration-findings.pdf",
+                    UploadedAt = DateTime.UtcNow
+                }
+            ]
+        }, CancellationToken.None);
+
+        var query = new GetMaintenanceLogsQuery(testEquipment.Id);
+        var handler = new GetMaintenanceLogsQueryHandler(maintenanceLogRepository);
+
+        var result = await handler.HandleAsync(query);
+
+        var log = Assert.Single(result);
+        var document = Assert.Single(log.Documents);
+        Assert.Equal("calibration-findings.pdf", document.FileName);
     }
 }

@@ -27,6 +27,7 @@ public class MaintenanceLogRepository : IMaintenanceLogRepository
     {
         return await _context.EquipmentMaintenanceLogs
             .AsNoTracking()
+            .Include(m => m.Documents)
             .Where(m => m.EquipmentId == equipmentId)
             .OrderByDescending(m => m.OccurredAt)
             .Take(200)

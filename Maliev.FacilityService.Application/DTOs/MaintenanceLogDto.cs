@@ -56,4 +56,9 @@ public record MaintenanceLogDto
     /// Timestamp when the log entry was created (UTC).
     /// </summary>
     public DateTime CreatedAt { get; init; }
+
+    /// <summary>
+    /// Documents, findings, photos, and reports attached to the maintenance log.
+    /// </summary>
+    public IReadOnlyList<MaintenanceLogDocumentDto> Documents { get; init; } = [];
 }

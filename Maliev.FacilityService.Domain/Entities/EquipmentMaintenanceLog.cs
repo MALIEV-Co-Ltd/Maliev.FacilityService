@@ -56,4 +56,9 @@ public class EquipmentMaintenanceLog
     /// Timestamp when the log was created (UTC).
     /// </summary>
     public DateTime CreatedAt { get; set; }
+
+    /// <summary>
+    /// Documents, findings, photos, and reports attached to this maintenance log.
+    /// </summary>
+    public List<EquipmentMaintenanceDocument> Documents { get; set; } = [];
 }

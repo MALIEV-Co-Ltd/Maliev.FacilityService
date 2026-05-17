@@ -309,6 +309,52 @@ namespace Maliev.FacilityService.Infrastructure.Data.Migrations
                     b.ToTable("equipment_maintenance_logs", (string)null);
                 });
 
+            modelBuilder.Entity("Maliev.FacilityService.Domain.Entities.EquipmentMaintenanceDocument", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)")
+                        .HasColumnName("content_type");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("file_name");
+
+                    b.Property<long>("FileSizeBytes")
+                        .HasColumnType("bigint")
+                        .HasColumnName("file_size_bytes");
+
+                    b.Property<Guid>("MaintenanceLogId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("maintenance_log_id");
+
+                    b.Property<string>("StoragePath")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
+                        .HasColumnName("storage_path");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("uploaded_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaintenanceLogId");
+
+                    b.HasIndex("StoragePath");
+
+                    b.ToTable("equipment_maintenance_documents", (string)null);
+                });
+
             modelBuilder.Entity("Maliev.FacilityService.Domain.Entities.EquipmentNote", b =>
                 {
                     b.Property<Guid>("Id")
@@ -813,6 +859,17 @@ namespace Maliev.FacilityService.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Maliev.FacilityService.Domain.Entities.EquipmentMaintenanceDocument", b =>
+                {
+                    b.HasOne("Maliev.FacilityService.Domain.Entities.EquipmentMaintenanceLog", "MaintenanceLog")
+                        .WithMany("Documents")
+                        .HasForeignKey("MaintenanceLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MaintenanceLog");
+                });
+
             modelBuilder.Entity("Maliev.FacilityService.Domain.Entities.EquipmentNote", b =>
                 {
                     b.HasOne("Maliev.FacilityService.Domain.Entities.Equipment", null)
@@ -820,6 +877,11 @@ namespace Maliev.FacilityService.Infrastructure.Data.Migrations
                         .HasForeignKey("EquipmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Maliev.FacilityService.Domain.Entities.EquipmentMaintenanceLog", b =>
+                {
+                    b.Navigation("Documents");
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxMessage", b =>

@@ -64,6 +64,27 @@ public class AddMaintenanceLogCommandHandler
             CreatedAt = DateTime.UtcNow
         };
 
+        foreach (var document in command.Documents ?? [])
+        {
+            if (string.IsNullOrWhiteSpace(document.FileName) || string.IsNullOrWhiteSpace(document.StoragePath))
+            {
+                continue;
+            }
+
+            log.Documents.Add(new EquipmentMaintenanceDocument
+            {
+                Id = Guid.NewGuid(),
+                MaintenanceLogId = log.Id,
+                FileName = document.FileName.Trim(),
+                ContentType = string.IsNullOrWhiteSpace(document.ContentType)
+                    ? "application/octet-stream"
+                    : document.ContentType.Trim(),
+                FileSizeBytes = document.FileSizeBytes,
+                StoragePath = document.StoragePath.Trim(),
+                UploadedAt = DateTime.UtcNow
+            });
+        }
+
         var saved = await _maintenanceLogRepository.AddAsync(log, cancellationToken);
         return saved.ToDto();
     }

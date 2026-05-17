@@ -50,6 +50,9 @@ public class FacilityDbContext : DbContext
     /// <summary>Gets the equipment maintenance logs table.</summary>
     public DbSet<EquipmentMaintenanceLog> EquipmentMaintenanceLogs => Set<EquipmentMaintenanceLog>();
 
+    /// <summary>Gets the equipment maintenance document metadata table.</summary>
+    public DbSet<EquipmentMaintenanceDocument> EquipmentMaintenanceDocuments => Set<EquipmentMaintenanceDocument>();
+
     /// <summary>Gets the equipment attachments table (CNC tooling, fixtures, etc.).</summary>
     public DbSet<EquipmentAttachment> EquipmentAttachments => Set<EquipmentAttachment>();
 
@@ -286,6 +289,27 @@ public class FacilityDbContext : DbContext
             entity.HasOne<Equipment>()
                 .WithMany()
                 .HasForeignKey(e => e.EquipmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<EquipmentMaintenanceDocument>(entity =>
+        {
+            entity.ToTable("equipment_maintenance_documents");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.MaintenanceLogId).HasColumnName("maintenance_log_id").IsRequired();
+            entity.Property(e => e.FileName).HasColumnName("file_name").HasMaxLength(255).IsRequired();
+            entity.Property(e => e.ContentType).HasColumnName("content_type").HasMaxLength(120).IsRequired();
+            entity.Property(e => e.FileSizeBytes).HasColumnName("file_size_bytes").IsRequired();
+            entity.Property(e => e.StoragePath).HasColumnName("storage_path").HasMaxLength(1024).IsRequired();
+            entity.Property(e => e.UploadedAt).HasColumnName("uploaded_at").IsRequired();
+
+            entity.HasIndex(e => e.MaintenanceLogId);
+            entity.HasIndex(e => e.StoragePath);
+
+            entity.HasOne(e => e.MaintenanceLog)
+                .WithMany(e => e.Documents)
+                .HasForeignKey(e => e.MaintenanceLogId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 

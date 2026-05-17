@@ -25,6 +25,27 @@ public static class MaintenanceLogMappingExtensions
             VendorName = log.VendorName,
             CostTHB = log.CostTHB,
             NextServiceDueDate = log.NextServiceDueDate,
-            CreatedAt = log.CreatedAt
+            CreatedAt = log.CreatedAt,
+            Documents = log.Documents
+                .OrderByDescending(document => document.UploadedAt)
+                .Select(document => document.ToDto())
+                .ToList()
+        };
+
+    /// <summary>
+    /// Maps an <see cref="EquipmentMaintenanceDocument"/> entity to a <see cref="MaintenanceLogDocumentDto"/>.
+    /// </summary>
+    /// <param name="document">The maintenance document entity to map.</param>
+    /// <returns>A <see cref="MaintenanceLogDocumentDto"/> populated from the entity.</returns>
+    public static MaintenanceLogDocumentDto ToDto(this EquipmentMaintenanceDocument document) =>
+        new()
+        {
+            Id = document.Id,
+            MaintenanceLogId = document.MaintenanceLogId,
+            FileName = document.FileName,
+            ContentType = document.ContentType,
+            FileSizeBytes = document.FileSizeBytes,
+            StoragePath = document.StoragePath,
+            UploadedAt = document.UploadedAt
         };
 }
