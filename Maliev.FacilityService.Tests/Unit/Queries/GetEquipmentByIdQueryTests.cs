@@ -22,12 +22,13 @@ public class GetEquipmentByIdQueryHandlerTests
     [Fact]
     public async Task HandleAsync_EquipmentExists_ReturnsEquipmentDto()
     {
+        const uint rowVersion = 18;
         var equipmentId = Guid.NewGuid();
         var equipment = CreateTestEquipment(equipmentId);
 
         _repositoryMock
-            .Setup(r => r.GetByIdAsync(equipmentId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(equipment);
+            .Setup(r => r.GetByIdWithRowVersionAsync(equipmentId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync((equipment, rowVersion));
 
         var query = new GetEquipmentByIdQuery(equipmentId);
         var result = await _handler.HandleAsync(query);
@@ -36,6 +37,7 @@ public class GetEquipmentByIdQueryHandlerTests
         Assert.Equal(equipmentId, result.Id);
         Assert.Equal(equipment.Name, result.Name);
         Assert.Equal(equipment.Category, result.Category);
+        Assert.Equal(rowVersion, result.RowVersion);
     }
 
     [Fact]
@@ -44,8 +46,8 @@ public class GetEquipmentByIdQueryHandlerTests
         var equipmentId = Guid.NewGuid();
 
         _repositoryMock
-            .Setup(r => r.GetByIdAsync(equipmentId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Equipment?)null);
+            .Setup(r => r.GetByIdWithRowVersionAsync(equipmentId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(((Equipment Equipment, uint RowVersion)?)null);
 
         var query = new GetEquipmentByIdQuery(equipmentId);
 

@@ -35,6 +35,15 @@ public static class EquipmentMappingExtensions
     /// <param name="equipment">The equipment entity to map.</param>
     /// <returns>An <see cref="EquipmentDto"/> populated from the entity.</returns>
     public static EquipmentDto ToDto(this Equipment equipment) =>
+        equipment.ToDto(rowVersion: 0);
+
+    /// <summary>
+    /// Maps an <see cref="Equipment"/> entity to an <see cref="EquipmentDto"/> with full detail, spec data, and row version.
+    /// </summary>
+    /// <param name="equipment">The equipment entity to map.</param>
+    /// <param name="rowVersion">The xmin row version for optimistic concurrency.</param>
+    /// <returns>An <see cref="EquipmentDto"/> populated from the entity.</returns>
+    public static EquipmentDto ToDto(this Equipment equipment, uint rowVersion) =>
         new()
         {
             Id = equipment.Id,
@@ -44,6 +53,7 @@ public static class EquipmentMappingExtensions
             ModelName = equipment.ModelName,
             Category = equipment.Category,
             Status = equipment.Status,
+            RowVersion = rowVersion,
             PurchasePriceTHB = equipment.PurchasePriceTHB,
             UpdatedAt = equipment.UpdatedAt,
             ManufacturerSerialNumber = equipment.ManufacturerSerialNumber,

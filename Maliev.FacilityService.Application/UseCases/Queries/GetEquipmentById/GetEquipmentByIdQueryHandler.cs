@@ -33,9 +33,9 @@ public class GetEquipmentByIdQueryHandler
         GetEquipmentByIdQuery query,
         CancellationToken cancellationToken = default)
     {
-        var equipment = await _equipmentRepository.GetByIdAsync(query.EquipmentId, cancellationToken)
+        var result = await _equipmentRepository.GetByIdWithRowVersionAsync(query.EquipmentId, cancellationToken)
             ?? throw new EquipmentNotFoundException(query.EquipmentId);
 
-        return equipment.ToDto();
+        return result.Equipment.ToDto(result.RowVersion);
     }
 }

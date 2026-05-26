@@ -43,6 +43,11 @@ public record EquipmentDto
     public EquipmentStatus Status { get; init; }
 
     /// <summary>
+    /// xmin row version used for optimistic concurrency.
+    /// </summary>
+    public uint RowVersion { get; init; }
+
+    /// <summary>
     /// Purchase price in Thai Baht.
     /// </summary>
     public decimal? PurchasePriceTHB { get; init; }

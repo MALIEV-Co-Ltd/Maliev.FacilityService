@@ -17,6 +17,16 @@ public interface IEquipmentRepository
     Task<Equipment?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Retrieves an equipment by its unique identifier with its xmin row version.
+    /// </summary>
+    /// <param name="id">The unique identifier of the equipment.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The equipment entity and xmin row version if found, otherwise null.</returns>
+    Task<(Equipment Equipment, uint RowVersion)?> GetByIdWithRowVersionAsync(
+        Guid id,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Retrieves all equipment with optional filtering and pagination.
     /// </summary>
     /// <param name="filters">Optional filter criteria.</param>

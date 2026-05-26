@@ -31,6 +31,23 @@ public class EquipmentRepository : IEquipmentRepository
     }
 
     /// <inheritdoc />
+    public async Task<(Equipment Equipment, uint RowVersion)?> GetByIdWithRowVersionAsync(
+        Guid id,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await _context.Equipments
+            .Where(e => e.Id == id)
+            .Select(e => new
+            {
+                Equipment = e,
+                RowVersion = EF.Property<uint>(e, "xmin")
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return result is null ? null : (result.Equipment, result.RowVersion);
+    }
+
+    /// <inheritdoc />
     public async Task<(IReadOnlyList<Equipment> Items, int TotalCount)> GetAllAsync(
         EquipmentFilter? filters = null,
         Pagination? pagination = null,

@@ -41,6 +41,7 @@ public class EquipmentMappingExtensionsTests
     [Fact]
     public void ToDto_MapsFullProperties()
     {
+        const uint rowVersion = 27;
         var equipment = new FdmPrinterEquipment
         {
             Id = Guid.NewGuid(),
@@ -65,11 +66,12 @@ public class EquipmentMappingExtensionsTests
             SetupFeeTHB = 100m
         };
 
-        var result = equipment.ToDto();
+        var result = equipment.ToDto(rowVersion);
 
         Assert.Equal(equipment.Id, result.Id);
         Assert.Equal(equipment.AssetCode, result.AssetCode);
         Assert.Equal(equipment.Name, result.Name);
+        Assert.Equal(rowVersion, result.RowVersion);
         Assert.NotNull(result.Spec);
     }
 
