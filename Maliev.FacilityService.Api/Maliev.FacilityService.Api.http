@@ -1,0 +1,223 @@
+@FacilityService_HostAddress = http://localhost:5200
+
+### List all equipment (paginated)
+GET {{FacilityService_HostAddress}}/facility/v1/equipments
+Accept: application/json
+
+###
+
+### List equipment filtered by category and status
+GET {{FacilityService_HostAddress}}/facility/v1/equipments?category=FdmPrinter&status=Active&page=1&pageSize=20
+Accept: application/json
+
+###
+
+### Get active manufacturing equipment
+GET {{FacilityService_HostAddress}}/facility/v1/equipments/active
+Accept: application/json
+
+###
+
+### Get equipment by ID
+GET {{FacilityService_HostAddress}}/facility/v1/equipments/00000000-0000-0000-0000-000000000001
+Accept: application/json
+
+###
+
+### Register new equipment (FDM Printer with spec)
+POST {{FacilityService_HostAddress}}/facility/v1/equipments
+Content-Type: application/json
+
+{
+  "name": "Prusa MK4 #1",
+  "category": "FdmPrinter",
+  "brand": "Prusa Research",
+  "modelName": "MK4",
+  "manufacturerSerialNumber": "SN-FDM-001",
+  "subCategory": "3D Printer",
+  "purchasePriceTHB": 25000,
+  "purchaseDate": "2024-01-15",
+  "warrantyExpiryDate": "2026-01-15",
+  "spec": {
+    "buildVolumeXMm": 250,
+    "buildVolumeYMm": 210,
+    "buildVolumeZMm": 220,
+    "hourlyRateTHB": 500
+  }
+}
+
+###
+
+### Register new equipment (Office Equipment — no spec)
+POST {{FacilityService_HostAddress}}/facility/v1/equipments
+Content-Type: application/json
+
+{
+  "name": "Herman Miller Aeron",
+  "category": "OfficeEquipment",
+  "brand": "Herman Miller",
+  "modelName": "Aeron",
+  "manufacturerSerialNumber": "HM-001",
+  "subCategory": "Furniture",
+  "purchasePriceTHB": 45000,
+  "purchaseDate": "2024-03-01"
+}
+
+###
+
+### Update equipment
+PUT {{FacilityService_HostAddress}}/facility/v1/equipments/00000000-0000-0000-0000-000000000001
+Content-Type: application/json
+
+{
+  "name": "Prusa MK4S #1",
+  "brand": "Prusa Research",
+  "modelName": "MK4S",
+  "rowVersion": 0
+}
+
+###
+
+### Change equipment status
+PATCH {{FacilityService_HostAddress}}/facility/v1/equipments/00000000-0000-0000-0000-000000000001/status
+Content-Type: application/json
+
+{
+  "newStatus": "UnderMaintenance",
+  "reason": "Scheduled quarterly service",
+  "rowVersion": 0
+}
+
+###
+
+### Delete equipment
+DELETE {{FacilityService_HostAddress}}/facility/v1/equipments/00000000-0000-0000-0000-000000000001
+
+###
+
+### Add equipment note
+POST {{FacilityService_HostAddress}}/facility/v1/equipments/00000000-0000-0000-0000-000000000001/notes
+Content-Type: application/json
+
+{
+  "content": "Replaced extruder nozzle. Print quality confirmed good."
+}
+
+###
+
+### Get equipment notes
+GET {{FacilityService_HostAddress}}/facility/v1/equipments/00000000-0000-0000-0000-000000000001/notes
+Accept: application/json
+
+###
+
+### Create loan (employee — auto-approved)
+POST {{FacilityService_HostAddress}}/facility/v1/loans
+Content-Type: application/json
+
+{
+  "equipmentId": "00000000-0000-0000-0000-000000000001",
+  "borrowerId": "00000000-0000-0000-0000-000000000002",
+  "borrowerType": "Employee",
+  "loanStartDate": "2025-03-01",
+  "expectedReturnDate": "2025-03-15",
+  "purpose": "Prototype fabrication for client demo"
+}
+
+###
+
+### Create loan (customer — requires approval)
+POST {{FacilityService_HostAddress}}/facility/v1/loans
+Content-Type: application/json
+
+{
+  "equipmentId": "00000000-0000-0000-0000-000000000001",
+  "borrowerId": "00000000-0000-0000-0000-000000000003",
+  "borrowerType": "Customer",
+  "loanStartDate": "2025-03-10",
+  "expectedReturnDate": "2025-03-20",
+  "purpose": "Product sample production"
+}
+
+###
+
+### Approve loan
+PATCH {{FacilityService_HostAddress}}/facility/v1/loans/00000000-0000-0000-0000-000000000010/approve
+Content-Type: application/json
+
+{
+  "approvedByEmployeeId": "00000000-0000-0000-0000-000000000004",
+  "borrowerDisplayName": "Acme Corp",
+  "rowVersion": 0
+}
+
+###
+
+### Reject loan
+PATCH {{FacilityService_HostAddress}}/facility/v1/loans/00000000-0000-0000-0000-000000000010/reject
+Content-Type: application/json
+
+{
+  "reason": "Equipment reserved for internal project",
+  "rowVersion": 0
+}
+
+###
+
+### Return loan
+PATCH {{FacilityService_HostAddress}}/facility/v1/loans/00000000-0000-0000-0000-000000000010/return
+Content-Type: application/json
+
+{
+  "returnedDate": "2025-03-14",
+  "condition": "Good — no damage",
+  "rowVersion": 0
+}
+
+###
+
+### Get equipment loans
+GET {{FacilityService_HostAddress}}/facility/v1/equipments/00000000-0000-0000-0000-000000000001/loans
+Accept: application/json
+
+###
+
+### Add maintenance log
+POST {{FacilityService_HostAddress}}/facility/v1/equipments/00000000-0000-0000-0000-000000000001/maintenance
+Content-Type: application/json
+
+{
+  "maintenanceType": "Preventive",
+  "description": "Quarterly lubrication and calibration",
+  "performedByEmployeeId": "00000000-0000-0000-0000-000000000005",
+  "performedDate": "2025-02-20",
+  "costTHB": 2500,
+  "nextServiceDueDate": "2025-05-20"
+}
+
+###
+
+### Get maintenance logs
+GET {{FacilityService_HostAddress}}/facility/v1/equipments/00000000-0000-0000-0000-000000000001/maintenance
+Accept: application/json
+
+###
+
+### Add CNC attachment
+POST {{FacilityService_HostAddress}}/facility/v1/equipments/00000000-0000-0000-0000-000000000001/attachments
+Content-Type: application/json
+
+{
+  "name": "10mm End Mill",
+  "attachmentType": "CuttingTool",
+  "serialNumber": "EM-10-001",
+  "condition": "New"
+}
+
+###
+
+### Get CNC attachments
+GET {{FacilityService_HostAddress}}/facility/v1/equipments/00000000-0000-0000-0000-000000000001/attachments
+Accept: application/json
+
+###
