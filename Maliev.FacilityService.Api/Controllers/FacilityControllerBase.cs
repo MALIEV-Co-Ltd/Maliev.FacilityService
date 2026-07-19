@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Maliev.FacilityService.Api.Controllers;
@@ -13,7 +14,7 @@ public abstract class FacilityControllerBase : ControllerBase
     /// Falls back to the configured default version so the fallback is never fragile.
     /// </summary>
     protected string ApiVersion =>
-        HttpContext.GetRequestedApiVersion()?.MajorVersion?.ToString()
-        ?? HttpContext.GetRequestedApiVersion()?.ToString()
+        HttpContext.RequestedApiVersion?.MajorVersion?.ToString()
+        ?? HttpContext.RequestedApiVersion?.ToString()
         ?? "1";
 }
