@@ -52,7 +52,7 @@ public class UpdateEquipmentIntegrationTests : IAsyncLifetime
         using (var context1 = CreateDbContext())
         {
             var repository = new EquipmentRepository(context1);
-            
+
             var equipment = new OfficeEquipmentItem
             {
                 Id = Guid.NewGuid(),
@@ -163,7 +163,7 @@ public class UpdateEquipmentIntegrationTests : IAsyncLifetime
         using (var context2 = CreateDbContext())
         {
             var staleEquipment = await context2.Equipments.FirstAsync(e => e.Id == equipmentId);
-            
+
             // 3. Update the entity in context3 (the "external update")
             using (var context3 = CreateDbContext())
             {

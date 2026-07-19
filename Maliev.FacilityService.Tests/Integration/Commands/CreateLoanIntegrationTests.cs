@@ -99,7 +99,7 @@ public class CreateLoanIntegrationTests : IAsyncLifetime
     public async Task HandleAsync_EmployeeLoan_ImmediatelyActiveAndEquipmentStatusChangesToOnLoan()
     {
         var equipment = await CreateTestEquipmentInNewContextAsync(EquipmentCategory.FdmPrinter, "MAL-FDM-TEST-001");
-        
+
         await using var context = CreateDbContext();
         var equipmentRepo = new EquipmentRepository(context);
         var loanRepo = new LoanRepository(context);
@@ -152,7 +152,7 @@ public class CreateLoanIntegrationTests : IAsyncLifetime
     public async Task HandleAsync_CustomerLoan_RemainsPendingAndEquipmentStatusNotChanged()
     {
         var equipment = await CreateTestEquipmentInNewContextAsync(EquipmentCategory.SlaPrinter, "MAL-SLA-TEST-001");
-        
+
         await using var context = CreateDbContext();
         var equipmentRepo = new EquipmentRepository(context);
         var loanRepo = new LoanRepository(context);
@@ -198,7 +198,7 @@ public class CreateLoanIntegrationTests : IAsyncLifetime
     public async Task HandleAsync_EquipmentAlreadyOnLoan_ThrowsLoanNotAllowedException()
     {
         var equipment = await CreateTestEquipmentInNewContextAsync(EquipmentCategory.CncMachine, "MAL-CNC-TEST-001");
-        
+
         // First loan - create in a separate context
         await using (var context1 = CreateDbContext())
         {
