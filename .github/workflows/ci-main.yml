@@ -19,7 +19,19 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Switch to PackageReference for Docker build
+        run: |
+          # Stable images consume stable shared-library packages.
+          VERSION_FORMAT="1.0.*"
+          find . -name "*.csproj" -type f -exec sed -i \
+            's|<ProjectReference Include=".*Maliev.Aspire.ServiceDefaults.*.csproj" />|<PackageReference Include="Maliev.Aspire.ServiceDefaults" Version="'$VERSION_FORMAT'" />|g' \
+            {} +
+          find . -name "*.csproj" -type f -exec sed -i \
+            's|<ProjectReference Include=".*Maliev.MessagingContracts.*.csproj" />|<PackageReference Include="Maliev.MessagingContracts" Version="'$VERSION_FORMAT'" />|g' \
+            {} +
+          echo "Switched to stable ServiceDefaults and MessagingContracts packages"
 
       - name: Switch to PackageReference for Docker build
         run: |
@@ -56,14 +68,14 @@ jobs:
           docker push asia-southeast1-docker.pkg.dev/maliev-website/maliev-website-artifact-prod/maliev-facility-service:${{ github.sha }}
 
       - name: Checkout maliev-gitops repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           repository: MALIEV-Co-Ltd/maliev-gitops
           token: ${{ secrets.GITOPS_PAT }}
           path: maliev-gitops
 
       - name: Install Kustomize
-        uses: imranismail/setup-kustomize@v2
+        uses: imranismail/setup-kustomize@53f941b41dca13ed61874bbc6b4b6e1562877530 # v3
 
 
       - name: Update image tag in maliev-gitops using Kustomize
